@@ -130,12 +130,12 @@ while True:
         
         
     else:
-        score = 0
         lives = 5
         cycle(2)
         cosmos = mkstars(100)
         dir = 1
         blinknum(score,red)
+        score = 0
         time.sleep(3)
         while not cp.button_a and not cp.button_b:
             time.sleep(.2)
