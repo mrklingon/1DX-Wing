@@ -1,6 +1,7 @@
 from adafruit_circuitplayground import cp
 import time
 import random
+from bach import *
 
 #Define colors
 pink = (12,10,12)
@@ -36,7 +37,7 @@ def cycle(x):
         cp.pixels[i%10] = random.choice(color)
         time.sleep(.1)
 
-
+    
 def blinknum(num,color):
     if num != 0:
         for i in range(num):
@@ -56,14 +57,16 @@ dir = 1
 global score
 score = 0
 cosmos = mkstars(100)
-
+if cp.switch: swtune(1)
 def fire(dir):
+    if cp.switch: playnote("k",.1)
     hit = 0
     if dir == 1:
         for i in ffire:
             cp.pixels[i] = gold
             time.sleep(.1)
             if cosmos[i] == 3:
+                if cp.switch: playstring("cck",.1)
                 hit = 1
                 cosmos[i] = 0
         for i in ffire:
@@ -73,6 +76,7 @@ def fire(dir):
             cp.pixels[i] = gold
             time.sleep(.1)
             if cosmos[i] == 3:
+                if cp.switch: playstring("cck",.1)
                 hit = 1
                 cosmos[i] = 0
         for i in rfire:
@@ -84,36 +88,38 @@ def showsky():
     cp.pixels.fill(blank)
     for i in range(10):
         cp.pixels[i]= stars[cosmos[i]]
-
+        
     #display x-wing
     if dir == 1:
         cp.pixels[4] = green
         if cosmos[4] == 3:
             cp.pixels.fill(red)
+            if cp.switch: playstring("fff",.5)
             ouch = 1
-            cosmos[4] = 0
+            cosmos[4] = 0 
     else:
         cp.pixels[5] = green
         if cosmos[5] == 3:
             cp.pixels.fill(red)
+            if cp.switch: playstring("fff",.5)
             ouch = 1
             cosmos[5] = 0
     time.sleep(.2)
     return ouch
-
+    
 def mvsky(dir,uni):
     if dir == 1:
-        mvstar = uni[0]
+        mvstar = uni[0] 
         uni.pop(0)
         uni.append(mvstar)
     else:
         mvstar = uni[-1]
         uni.pop(-1)
         uni = [mvstar]+uni
-
+        
 
     return uni
-
+    
 lives = 5
 
 
@@ -121,8 +127,8 @@ while True:
     if lives > 0:
         lives = lives - showsky()
         cosmos = mvsky(dir,cosmos)
-
-
+        
+        
     else:
         print("restart")
         score = 0
@@ -132,7 +138,9 @@ while True:
         dir = 1
         blinknum(score,red)
         time.sleep(3)
-
+        while not cp.button_a:
+            time.sleep(.2)
+        
     if cp.button_a:
         #fire
         print("fire")
@@ -152,8 +160,8 @@ while True:
         cycle(2)
         cosmos = mkstars(100)
         dir = 1
-
-
+        
+        
     if cp.touch_A4:
         #hyperspace
         cycle(1)
