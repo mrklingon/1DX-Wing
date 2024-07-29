@@ -130,7 +130,6 @@ while True:
         
         
     else:
-        print("restart")
         score = 0
         lives = 5
         cycle(2)
@@ -138,9 +137,10 @@ while True:
         dir = 1
         blinknum(score,red)
         time.sleep(3)
-        while not cp.button_a:
+        while not cp.button_a and not cp.button_b:
             time.sleep(.2)
-        
+        print("restart")
+
     if cp.button_a:
         #fire
         print("fire")
